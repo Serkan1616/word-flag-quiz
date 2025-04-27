@@ -90,7 +90,7 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen justify-center items-center bg-[url('./bg.jpg')] bg-cover bg-no-repeat text-[#E2E4F3] font-vietnam px-4 py-8">
+    <div className="flex min-h-screen justify-center items-center bg-[url('/bg.jpg')] bg-cover bg-no-repeat text-[#E2E4F3] font-vietnam px-4 py-8">
       <div className="flex flex-col gap-10 w-full max-w-3xl">
         {isQuizFinished ? (
           <div className="flex flex-col bg-[#343964] rounded-2xl py-10 px-6 sm:px-20 items-center justify-center text-white text-center gap-6">
