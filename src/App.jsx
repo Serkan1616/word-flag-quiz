@@ -11,6 +11,7 @@ function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name,flags")
@@ -75,12 +76,17 @@ function App() {
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-      setIsAnswered(false);
+      setIsLoading(true);
+      setTimeout(() => {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setIsAnswered(false);
+        setIsLoading(false);
+      }, 200); // 500ms gecikmeli geçiş
     } else {
       setIsQuizFinished(true);
     }
   };
+
   const restartQuiz = () => {
     setScore(0);
     setCurrentQuestionIndex(0);
@@ -137,13 +143,30 @@ function App() {
               </div>
 
               {questions.length > 0 && (
-                <Question
-                  key={currentQuestionIndex}
-                  name={questions[currentQuestionIndex].name}
-                  flag={questions[currentQuestionIndex].flag}
-                  options={questions[currentQuestionIndex].options}
-                  onAnswer={handleAnswer}
-                />
+                <>
+                  {isLoading ? (
+                    <div className="animate-pulse space-y-6 bg-[#2F355C] p-6 rounded-xl">
+                      <div className="h-48 bg-gray-400 rounded-xl w-full"></div>
+                      <div className="space-y-4">
+                        <div className="h-4 bg-gray-400 rounded w-3/4"></div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="h-10 bg-gray-400 rounded-xl"></div>
+                          <div className="h-10 bg-gray-400 rounded-xl"></div>
+                          <div className="h-10 bg-gray-400 rounded-xl"></div>
+                          <div className="h-10 bg-gray-400 rounded-xl"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <Question
+                      key={currentQuestionIndex}
+                      name={questions[currentQuestionIndex].name}
+                      flag={questions[currentQuestionIndex].flag}
+                      options={questions[currentQuestionIndex].options}
+                      onAnswer={handleAnswer}
+                    />
+                  )}
+                </>
               )}
 
               <button
@@ -151,7 +174,7 @@ function App() {
                 disabled={!isAnswered}
                 className={`self-end px-6 py-2 sm:px-8 sm:py-3 rounded-lg text-white font-bold transition-all ${
                   isAnswered
-                    ? "bg-[#E65895] cursor-pointer hover:bg-[#BC6BE8]"
+                    ? "bg-[#E65895] cursor-pointer transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#BC6BE8]"
                     : "bg-gray-500 cursor-not-allowed"
                 }`}
               >
